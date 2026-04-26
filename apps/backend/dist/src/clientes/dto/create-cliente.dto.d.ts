@@ -1,4 +1,4 @@
-import { TipoDocumento } from '@prisma/client';
+import { TipoDocumento } from '../../common/enums';
 export declare class CreateClienteDto {
     tipoDoc: TipoDocumento;
     numDoc: string;

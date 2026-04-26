@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const axios_1 = __importDefault(require("axios"));
 let ClientesService = class ClientesService {
-    prisma;
     constructor(prisma) {
         this.prisma = prisma;
     }

@@ -8,24 +8,24 @@ export class UsuarioService {
   constructor(private prisma: PrismaService) {}
 
   async crear(dto: RegisterDto) {
-    const existe = await this.prisma.usuario.findUnique({
+    const existe = await (this.prisma as any).usuario.findUnique({
       where: { email: dto.email },
     })
     if (existe) throw new ConflictException('El email ya está registrado')
 
     const hash = await bcrypt.hash(dto.password, 10)
-    return this.prisma.usuario.create({
+    return (this.prisma as any).usuario.create({
       data: { ...dto, password: hash },
       select: { id: true, nombre: true, email: true, rol: true, createdAt: true },
     })
   }
 
   async buscarPorEmail(email: string) {
-    return this.prisma.usuario.findUnique({ where: { email } })
+    return (this.prisma as any).usuario.findUnique({ where: { email } })
   }
 
   async buscarPorId(id: string) {
-    const usuario = await this.prisma.usuario.findUnique({
+    const usuario = await (this.prisma as any).usuario.findUnique({
       where: { id },
       select: { id: true, nombre: true, email: true, rol: true, activo: true },
     })

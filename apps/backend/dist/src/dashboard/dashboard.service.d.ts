@@ -4,36 +4,27 @@ export declare class DashboardService {
     constructor(prisma: PrismaService);
     getKpis(): Promise<{
         resumen: {
-            totalFacturas: number;
-            totalBoletas: number;
-            totalClientes: number;
-            totalProductos: number;
-            comprobantesAnulados: number;
+            totalFacturas: any;
+            totalBoletas: any;
+            totalClientes: any;
+            totalProductos: any;
+            comprobantesAnulados: any;
         };
         ventasMes: {
-            subtotal: number | import("@prisma/client/runtime/client").Decimal;
-            igv: number | import("@prisma/client/runtime/client").Decimal;
-            total: number | import("@prisma/client/runtime/client").Decimal;
-            cantidad: number;
+            subtotal: any;
+            igv: any;
+            total: any;
+            cantidad: any;
         };
         ventasAnio: {
-            total: number | import("@prisma/client/runtime/client").Decimal;
-            cantidad: number;
+            total: any;
+            cantidad: any;
         };
-        ultimosComprobantes: {
-            id: string;
-            serie: string;
-            correlativo: string;
-            tipo: import("@prisma/client").$Enums.TipoComprobante;
-            cliente: string;
-            total: import("@prisma/client/runtime/client").Decimal;
-            estado: import("@prisma/client").$Enums.EstadoComprobante;
-            fecha: Date;
-        }[];
+        ultimosComprobantes: any;
     }>;
     getVentasPorMes(): Promise<{
         mes: string;
-        total: number | import("@prisma/client/runtime/client").Decimal;
-        cantidad: number;
+        total: any;
+        cantidad: any;
     }[]>;
 }

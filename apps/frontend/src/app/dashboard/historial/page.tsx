@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Search, XCircle, FileText, Eye } from 'lucide-react'
+import { Search, XCircle, FileText, Eye, Download } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Comprobante } from '@/types'
+import { descargarPdf } from '@/lib/pdf'
 
 const fmt = (n: number) => new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(n)
 
@@ -188,7 +189,16 @@ export default function HistorialPage() {
                   </span>
                 </div>
 
-                {detalle.estado === 'EMITIDO' && (
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full mb-2"
+                    onClick={() => descargarPdf(detalle.id, detalle.serie, detalle.correlativo)}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar PDF
+                  </Button>
+                  {detalle.estado === 'EMITIDO' && (
                   <Button
                     variant="destructive"
                     size="sm"

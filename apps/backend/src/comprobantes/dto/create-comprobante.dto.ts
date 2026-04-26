@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEnum, IsArray, ValidateNested, IsNumber, IsBoolean, Min } from 'class-validator'
 import { Type } from 'class-transformer'
-import { TipoComprobante } from '@prisma/client'
+import { TipoComprobante } from '../../common/enums'
 
 export class CreateItemDto {
   @IsString()

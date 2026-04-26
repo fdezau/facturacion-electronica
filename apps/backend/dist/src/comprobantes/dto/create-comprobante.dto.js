@@ -12,15 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateComprobanteDto = exports.CreateItemDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
-const client_1 = require("@prisma/client");
+const enums_1 = require("../../common/enums");
 class CreateItemDto {
-    productoId;
-    descripcion;
-    cantidad;
-    unidad;
-    precioUnitario;
-    descuento;
-    afectaIgv;
 }
 exports.CreateItemDto = CreateItemDto;
 __decorate([
@@ -61,17 +54,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], CreateItemDto.prototype, "afectaIgv", void 0);
 class CreateComprobanteDto {
-    tipoComprobante;
-    clienteId;
-    empresaId;
-    moneda;
-    observaciones;
-    fechaVencimiento;
-    items;
 }
 exports.CreateComprobanteDto = CreateComprobanteDto;
 __decorate([
-    (0, class_validator_1.IsEnum)(client_1.TipoComprobante),
+    (0, class_validator_1.IsEnum)(enums_1.TipoComprobante),
     __metadata("design:type", String)
 ], CreateComprobanteDto.prototype, "tipoComprobante", void 0);
 __decorate([

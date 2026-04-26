@@ -1,4 +1,4 @@
-import { TipoComprobante } from '@prisma/client';
+import { TipoComprobante } from '../../common/enums';
 export declare class CreateItemDto {
     productoId?: string;
     descripcion: string;

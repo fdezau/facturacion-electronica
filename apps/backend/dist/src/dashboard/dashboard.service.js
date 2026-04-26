@@ -13,80 +13,63 @@ exports.DashboardService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 let DashboardService = class DashboardService {
-    prisma;
     constructor(prisma) {
         this.prisma = prisma;
     }
     async getKpis() {
+        const prisma = this.prisma;
         const ahora = new Date();
         const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
         const inicioAnio = new Date(ahora.getFullYear(), 0, 1);
-        const [totalFacturas, totalBoletas, totalClientes, totalProductos, ventasMes, ventasAnio, ultimosComprobantes, comprobantesAnulados,] = await Promise.all([
-            this.prisma.comprobante.count({
-                where: { tipoComprobante: 'FACTURA', estado: 'EMITIDO' },
-            }),
-            this.prisma.comprobante.count({
-                where: { tipoComprobante: 'BOLETA', estado: 'EMITIDO' },
-            }),
-            this.prisma.cliente.count(),
-            this.prisma.producto.count({ where: { activo: true } }),
-            this.prisma.comprobante.aggregate({
+        const [totalFacturas, totalBoletas, totalClientes, totalProductos, ventasMes, ventasAnio, ultimosComprobantes, comprobantesAnulados] = await Promise.all([
+            prisma.comprobante.count({ where: { tipoComprobante: 'FACTURA', estado: 'EMITIDO' } }),
+            prisma.comprobante.count({ where: { tipoComprobante: 'BOLETA', estado: 'EMITIDO' } }),
+            prisma.cliente.count(),
+            prisma.producto.count({ where: { activo: true } }),
+            prisma.comprobante.aggregate({
                 where: { estado: 'EMITIDO', fechaEmision: { gte: inicioMes } },
                 _sum: { total: true, igv: true, subtotal: true },
                 _count: true,
             }),
-            this.prisma.comprobante.aggregate({
+            prisma.comprobante.aggregate({
                 where: { estado: 'EMITIDO', fechaEmision: { gte: inicioAnio } },
                 _sum: { total: true },
                 _count: true,
             }),
-            this.prisma.comprobante.findMany({
+            prisma.comprobante.findMany({
                 take: 5,
                 orderBy: { createdAt: 'desc' },
                 include: { cliente: true },
             }),
-            this.prisma.comprobante.count({ where: { estado: 'ANULADO' } }),
+            prisma.comprobante.count({ where: { estado: 'ANULADO' } }),
         ]);
         return {
-            resumen: {
-                totalFacturas,
-                totalBoletas,
-                totalClientes,
-                totalProductos,
-                comprobantesAnulados,
-            },
+            resumen: { totalFacturas, totalBoletas, totalClientes, totalProductos, comprobantesAnulados },
             ventasMes: {
                 subtotal: ventasMes._sum.subtotal ?? 0,
                 igv: ventasMes._sum.igv ?? 0,
                 total: ventasMes._sum.total ?? 0,
                 cantidad: ventasMes._count,
             },
-            ventasAnio: {
-                total: ventasAnio._sum.total ?? 0,
-                cantidad: ventasAnio._count,
-            },
+            ventasAnio: { total: ventasAnio._sum.total ?? 0, cantidad: ventasAnio._count },
             ultimosComprobantes: ultimosComprobantes.map((c) => ({
-                id: c.id,
-                serie: c.serie,
-                correlativo: c.correlativo,
-                tipo: c.tipoComprobante,
-                cliente: c.cliente.razonSocial,
-                total: c.total,
-                estado: c.estado,
-                fecha: c.fechaEmision,
+                id: c.id, serie: c.serie, correlativo: c.correlativo,
+                tipo: c.tipoComprobante, cliente: c.cliente.razonSocial,
+                total: c.total, estado: c.estado, fecha: c.fechaEmision,
             })),
         };
     }
     async getVentasPorMes() {
+        const prisma = this.prisma;
         const meses = Array.from({ length: 6 }, (_, i) => {
             const d = new Date();
             d.setMonth(d.getMonth() - i);
             return { anio: d.getFullYear(), mes: d.getMonth() + 1 };
         }).reverse();
-        const datos = await Promise.all(meses.map(async ({ anio, mes }) => {
+        return Promise.all(meses.map(async ({ anio, mes }) => {
             const inicio = new Date(anio, mes - 1, 1);
             const fin = new Date(anio, mes, 0, 23, 59, 59);
-            const result = await this.prisma.comprobante.aggregate({
+            const result = await prisma.comprobante.aggregate({
                 where: { estado: 'EMITIDO', fechaEmision: { gte: inicio, lte: fin } },
                 _sum: { total: true },
                 _count: true,
@@ -97,7 +80,6 @@ let DashboardService = class DashboardService {
                 cantidad: result._count,
             };
         }));
-        return datos;
     }
 };
 exports.DashboardService = DashboardService;

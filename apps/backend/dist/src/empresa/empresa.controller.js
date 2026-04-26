@@ -19,7 +19,6 @@ const create_empresa_dto_1 = require("./dto/create-empresa.dto");
 const update_empresa_dto_1 = require("./dto/update-empresa.dto");
 const jwt_guard_1 = require("../common/guards/jwt.guard");
 let EmpresaController = class EmpresaController {
-    empresaService;
     constructor(empresaService) {
         this.empresaService = empresaService;
     }

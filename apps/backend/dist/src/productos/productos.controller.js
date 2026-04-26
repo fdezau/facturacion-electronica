@@ -19,7 +19,6 @@ const create_producto_dto_1 = require("./dto/create-producto.dto");
 const update_producto_dto_1 = require("./dto/update-producto.dto");
 const jwt_guard_1 = require("../common/guards/jwt.guard");
 let ProductosController = class ProductosController {
-    productosService;
     constructor(productosService) {
         this.productosService = productosService;
     }

@@ -8,13 +8,13 @@ export class ProductosService {
   constructor(private prisma: PrismaService) {}
 
   async crear(dto: CreateProductoDto) {
-    const existe = await this.prisma.producto.findUnique({ where: { codigo: dto.codigo } })
+    const existe = await (this.prisma as any).producto.findUnique({ where: { codigo: dto.codigo } })
     if (existe) throw new ConflictException('Ya existe un producto con ese código')
-    return this.prisma.producto.create({ data: dto })
+    return (this.prisma as any).producto.create({ data: dto })
   }
 
   async listar(busqueda?: string, soloActivos?: boolean) {
-    return this.prisma.producto.findMany({
+    return (this.prisma as any).producto.findMany({
       where: {
         activo: soloActivos ? true : undefined,
         OR: busqueda
@@ -29,18 +29,18 @@ export class ProductosService {
   }
 
   async obtenerPorId(id: string) {
-    const producto = await this.prisma.producto.findUnique({ where: { id } })
+    const producto = await (this.prisma as any).producto.findUnique({ where: { id } })
     if (!producto) throw new NotFoundException('Producto no encontrado')
     return producto
   }
 
   async actualizar(id: string, dto: UpdateProductoDto) {
     await this.obtenerPorId(id)
-    return this.prisma.producto.update({ where: { id }, data: dto })
+    return (this.prisma as any).producto.update({ where: { id }, data: dto })
   }
 
   async eliminar(id: string) {
     await this.obtenerPorId(id)
-    return this.prisma.producto.delete({ where: { id } })
+    return (this.prisma as any).producto.delete({ where: { id } })
   }
 }

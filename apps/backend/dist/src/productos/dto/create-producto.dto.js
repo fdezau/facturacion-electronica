@@ -13,12 +13,6 @@ exports.CreateProductoDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 class CreateProductoDto {
-    codigo;
-    descripcion;
-    unidad;
-    precio;
-    igv;
-    activo;
 }
 exports.CreateProductoDto = CreateProductoDto;
 __decorate([

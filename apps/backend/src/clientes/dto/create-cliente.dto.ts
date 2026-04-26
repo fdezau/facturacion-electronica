@@ -1,5 +1,5 @@
 import { IsString, IsOptional, IsEmail, IsEnum } from 'class-validator'
-import { TipoDocumento } from '@prisma/client'
+import { TipoDocumento } from '../../common/enums'
 
 export class CreateClienteDto {
   @IsEnum(TipoDocumento)

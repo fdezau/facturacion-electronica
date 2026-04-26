@@ -12,17 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateEmpresaDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateEmpresaDto {
-    ruc;
-    razonSocial;
-    nombreComercial;
-    direccion;
-    ubigeo;
-    departamento;
-    provincia;
-    distrito;
-    telefono;
-    email;
-    logo;
 }
 exports.CreateEmpresaDto = CreateEmpresaDto;
 __decorate([

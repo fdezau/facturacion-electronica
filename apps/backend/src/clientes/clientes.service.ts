@@ -59,13 +59,13 @@ export class ClientesService {
   }
 
   async crear(dto: CreateClienteDto) {
-    const existe = await this.prisma.cliente.findUnique({ where: { numDoc: dto.numDoc } })
+    const existe = await (this.prisma as any).cliente.findUnique({ where: { numDoc: dto.numDoc } })
     if (existe) throw new ConflictException('Ya existe un cliente con ese documento')
-    return this.prisma.cliente.create({ data: dto })
+    return (this.prisma as any).cliente.create({ data: dto })
   }
 
   async listar(busqueda?: string) {
-    return this.prisma.cliente.findMany({
+    return (this.prisma as any).cliente.findMany({
       where: busqueda
         ? {
             OR: [
@@ -79,18 +79,18 @@ export class ClientesService {
   }
 
   async obtenerPorId(id: string) {
-    const cliente = await this.prisma.cliente.findUnique({ where: { id } })
+    const cliente = await (this.prisma as any).cliente.findUnique({ where: { id } })
     if (!cliente) throw new NotFoundException('Cliente no encontrado')
     return cliente
   }
 
   async actualizar(id: string, dto: UpdateClienteDto) {
     await this.obtenerPorId(id)
-    return this.prisma.cliente.update({ where: { id }, data: dto })
+    return (this.prisma as any).cliente.update({ where: { id }, data: dto })
   }
 
   async eliminar(id: string) {
     await this.obtenerPorId(id)
-    return this.prisma.cliente.delete({ where: { id } })
+    return (this.prisma as any).cliente.delete({ where: { id } })
   }
 }

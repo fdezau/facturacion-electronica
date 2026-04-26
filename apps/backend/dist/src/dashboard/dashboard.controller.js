@@ -14,7 +14,6 @@ const common_1 = require("@nestjs/common");
 const dashboard_service_1 = require("./dashboard.service");
 const jwt_guard_1 = require("../common/guards/jwt.guard");
 let DashboardController = class DashboardController {
-    dashboardService;
     constructor(dashboardService) {
         this.dashboardService = dashboardService;
     }

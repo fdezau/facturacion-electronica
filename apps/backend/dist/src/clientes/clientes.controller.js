@@ -19,7 +19,6 @@ const create_cliente_dto_1 = require("./dto/create-cliente.dto");
 const update_cliente_dto_1 = require("./dto/update-cliente.dto");
 const jwt_guard_1 = require("../common/guards/jwt.guard");
 let ClientesController = class ClientesController {
-    clientesService;
     constructor(clientesService) {
         this.clientesService = clientesService;
     }

@@ -1,4 +1,4 @@
-import { Rol } from '@prisma/client';
+import { Rol } from '../../common/enums';
 export declare class RegisterDto {
     nombre: string;
     email: string;

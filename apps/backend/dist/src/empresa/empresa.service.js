@@ -13,7 +13,6 @@ exports.EmpresaService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 let EmpresaService = class EmpresaService {
-    prisma;
     constructor(prisma) {
         this.prisma = prisma;
     }

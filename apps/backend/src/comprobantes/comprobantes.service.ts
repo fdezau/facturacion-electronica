@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { CreateComprobanteDto } from './dto/create-comprobante.dto'
-import { TipoComprobante, EstadoComprobante } from '@prisma/client'
+import { TipoComprobante, EstadoComprobante } from '../common/enums'
 
 const IGV_RATE = 0.18
 
@@ -17,7 +17,7 @@ export class ComprobantesService {
       NOTA_DEBITO: 'FD01',
     }
     const serie = prefijos[tipo]
-    const ultimo = await this.prisma.comprobante.findFirst({
+    const ultimo = await (this.prisma as any).comprobante.findFirst({
       where: { serie, tipoComprobante: tipo },
       orderBy: { correlativo: 'desc' },
     })
@@ -48,10 +48,11 @@ export class ComprobantesService {
   }
 
   async crear(dto: CreateComprobanteDto) {
-    const cliente = await this.prisma.cliente.findUnique({ where: { id: dto.clienteId } })
+    const prisma = this.prisma as any
+    const cliente = await prisma.cliente.findUnique({ where: { id: dto.clienteId } })
     if (!cliente) throw new NotFoundException('Cliente no encontrado')
 
-    const empresa = await this.prisma.empresa.findUnique({ where: { id: dto.empresaId } })
+    const empresa = await prisma.empresa.findUnique({ where: { id: dto.empresaId } })
     if (!empresa) throw new NotFoundException('Empresa no encontrada')
 
     if (dto.tipoComprobante === 'FACTURA' && cliente.tipoDoc !== 'RUC')
@@ -63,19 +64,16 @@ export class ComprobantesService {
     const total = itemsCalculados.reduce((a, i) => a + i.total, 0)
     const { serie, correlativo } = await this.generarSerie(dto.tipoComprobante)
 
-    return this.prisma.comprobante.create({
+    return prisma.comprobante.create({
       data: {
-        serie,
-        correlativo,
+        serie, correlativo,
         tipoComprobante: dto.tipoComprobante,
         clienteId: dto.clienteId,
         empresaId: dto.empresaId,
         moneda: dto.moneda ?? 'PEN',
         observaciones: dto.observaciones,
         fechaVencimiento: dto.fechaVencimiento ? new Date(dto.fechaVencimiento) : null,
-        subtotal,
-        igv,
-        total,
+        subtotal, igv, total,
         items: { create: itemsCalculados },
       },
       include: { items: true, cliente: true, empresa: true },
@@ -83,7 +81,7 @@ export class ComprobantesService {
   }
 
   async listar(filtros?: { tipo?: TipoComprobante; estado?: EstadoComprobante; clienteId?: string }) {
-    return this.prisma.comprobante.findMany({
+    return (this.prisma as any).comprobante.findMany({
       where: {
         tipoComprobante: filtros?.tipo,
         estado: filtros?.estado,
@@ -95,7 +93,7 @@ export class ComprobantesService {
   }
 
   async obtenerPorId(id: string) {
-    const comprobante = await this.prisma.comprobante.findUnique({
+    const comprobante = await (this.prisma as any).comprobante.findUnique({
       where: { id },
       include: { cliente: true, empresa: true, items: { include: { producto: true } } },
     })
@@ -107,31 +105,31 @@ export class ComprobantesService {
     const comprobante = await this.obtenerPorId(id)
     if (comprobante.estado === 'ANULADO')
       throw new BadRequestException('El comprobante ya está anulado')
-    return this.prisma.comprobante.update({
+    return (this.prisma as any).comprobante.update({
       where: { id },
       data: { estado: EstadoComprobante.ANULADO },
     })
   }
 
   async estadisticas() {
-    const [facturas, boletas, totalMes] = await Promise.all([
-      this.prisma.comprobante.count({ where: { tipoComprobante: 'FACTURA', estado: 'EMITIDO' } }),
-      this.prisma.comprobante.count({ where: { tipoComprobante: 'BOLETA', estado: 'EMITIDO' } }),
-      this.prisma.comprobante.aggregate({
+    const prisma = this.prisma as any
+    const [facturas, boletas, totalMes, comprobantesAnulados] = await Promise.all([
+      prisma.comprobante.count({ where: { tipoComprobante: 'FACTURA', estado: 'EMITIDO' } }),
+      prisma.comprobante.count({ where: { tipoComprobante: 'BOLETA', estado: 'EMITIDO' } }),
+      prisma.comprobante.aggregate({
         where: {
           estado: 'EMITIDO',
-          fechaEmision: {
-            gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-          },
+          fechaEmision: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
         },
         _sum: { total: true, igv: true },
       }),
+      prisma.comprobante.count({ where: { estado: 'ANULADO' } }),
     ])
     return {
-      facturas,
-      boletas,
+      facturas, boletas,
       totalMes: totalMes._sum.total ?? 0,
       igvMes: totalMes._sum.igv ?? 0,
+      comprobantesAnulados,
     }
   }
 }
