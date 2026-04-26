@@ -16,13 +16,15 @@ exports.ComprobantesController = void 0;
 const common_1 = require("@nestjs/common");
 const comprobantes_service_1 = require("./comprobantes.service");
 const pdf_service_1 = require("../pdf/pdf.service");
+const xml_service_1 = require("../xml/xml.service");
 const create_comprobante_dto_1 = require("./dto/create-comprobante.dto");
 const jwt_guard_1 = require("../common/guards/jwt.guard");
 const enums_1 = require("../common/enums");
 let ComprobantesController = class ComprobantesController {
-    constructor(comprobantesService, pdfService) {
+    constructor(comprobantesService, pdfService, xmlService) {
         this.comprobantesService = comprobantesService;
         this.pdfService = pdfService;
+        this.xmlService = xmlService;
     }
     crear(dto) {
         return this.comprobantesService.crear(dto);
@@ -42,6 +44,17 @@ let ComprobantesController = class ComprobantesController {
         res.set({
             'Content-Type': 'application/pdf',
             'Content-Disposition': `attachment; filename="${comprobante.serie}-${comprobante.correlativo}.pdf"`,
+            'Content-Length': buffer.length,
+        });
+        res.end(buffer);
+    }
+    async descargarXml(id, res) {
+        const comprobante = await this.comprobantesService.obtenerPorId(id);
+        const xml = this.xmlService.generarComprobante(comprobante);
+        const buffer = Buffer.from(xml, 'utf-8');
+        res.set({
+            'Content-Type': 'application/xml',
+            'Content-Disposition': `attachment; filename="${comprobante.serie}-${comprobante.correlativo}.xml"`,
             'Content-Length': buffer.length,
         });
         res.end(buffer);
@@ -89,6 +102,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ComprobantesController.prototype, "descargarPdf", null);
 __decorate([
+    (0, common_1.Get)(':id/xml'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ComprobantesController.prototype, "descargarXml", null);
+__decorate([
     (0, common_1.Patch)(':id/anular'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -99,6 +120,7 @@ exports.ComprobantesController = ComprobantesController = __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('comprobantes'),
     __metadata("design:paramtypes", [comprobantes_service_1.ComprobantesService,
-        pdf_service_1.PdfService])
+        pdf_service_1.PdfService,
+        xml_service_1.XmlService])
 ], ComprobantesController);
 //# sourceMappingURL=comprobantes.controller.js.map

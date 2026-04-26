@@ -12,12 +12,13 @@ const comprobantes_service_1 = require("./comprobantes.service");
 const comprobantes_controller_1 = require("./comprobantes.controller");
 const prisma_service_1 = require("../prisma.service");
 const pdf_module_1 = require("../pdf/pdf.module");
+const xml_module_1 = require("../xml/xml.module");
 let ComprobantesModule = class ComprobantesModule {
 };
 exports.ComprobantesModule = ComprobantesModule;
 exports.ComprobantesModule = ComprobantesModule = __decorate([
     (0, common_1.Module)({
-        imports: [pdf_module_1.PdfModule],
+        imports: [pdf_module_1.PdfModule, xml_module_1.XmlModule],
         controllers: [comprobantes_controller_1.ComprobantesController],
         providers: [comprobantes_service_1.ComprobantesService, prisma_service_1.PrismaService],
         exports: [comprobantes_service_1.ComprobantesService],

@@ -8,12 +8,31 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Search, XCircle, FileText, Eye, Download } from 'lucide-react'
+import { Search, XCircle, FileText, Eye, Download, FileCode } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Comprobante } from '@/types'
-import { descargarPdf } from '@/lib/pdf'
 
 const fmt = (n: number) => new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(n)
+
+async function descargarPdf(id: string, serie: string, correlativo: string) {
+  const res = await api.get(`/comprobantes/${id}/pdf`, { responseType: 'blob' })
+  const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${serie}-${correlativo}.pdf`
+  link.click()
+  window.URL.revokeObjectURL(url)
+}
+
+async function descargarXml(id: string, serie: string, correlativo: string) {
+  const res = await api.get(`/comprobantes/${id}/xml`, { responseType: 'blob' })
+  const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/xml' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${serie}-${correlativo}.xml`
+  link.click()
+  window.URL.revokeObjectURL(url)
+}
 
 const estadoBadge = (estado: string) => {
   if (estado === 'EMITIDO') return <Badge className="bg-green-100 text-green-700 hover:bg-green-100">EMITIDO</Badge>
@@ -127,7 +146,6 @@ export default function HistorialPage() {
           </Card>
         </div>
 
-        {/* Panel detalle */}
         {detalle && (
           <div>
             <Card>
@@ -189,27 +207,38 @@ export default function HistorialPage() {
                   </span>
                 </div>
 
-                <Button
+                <div className="space-y-2">
+                  <Button
                     variant="outline"
                     size="sm"
-                    className="w-full mb-2"
+                    className="w-full"
                     onClick={() => descargarPdf(detalle.id, detalle.serie, detalle.correlativo)}
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Descargar PDF
                   </Button>
-                  {detalle.estado === 'EMITIDO' && (
                   <Button
-                    variant="destructive"
+                    variant="outline"
                     size="sm"
                     className="w-full"
-                    onClick={() => anularMutation.mutate(detalle.id)}
-                    disabled={anularMutation.isPending}
+                    onClick={() => descargarXml(detalle.id, detalle.serie, detalle.correlativo)}
                   >
-                    <XCircle className="w-4 h-4 mr-2" />
-                    Anular Comprobante
+                    <FileCode className="w-4 h-4 mr-2" />
+                    Descargar XML UBL 2.1
                   </Button>
-                )}
+                  {detalle.estado === 'EMITIDO' && (
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => anularMutation.mutate(detalle.id)}
+                      disabled={anularMutation.isPending}
+                    >
+                      <XCircle className="w-4 h-4 mr-2" />
+                      Anular Comprobante
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>

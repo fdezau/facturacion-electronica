@@ -2,6 +2,7 @@ import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards, Res } from
 import { Response } from 'express'
 import { ComprobantesService } from './comprobantes.service'
 import { PdfService } from '../pdf/pdf.service'
+import { XmlService } from '../xml/xml.service'
 import { CreateComprobanteDto } from './dto/create-comprobante.dto'
 import { JwtGuard } from '../common/guards/jwt.guard'
 import { TipoComprobante, EstadoComprobante } from '../common/enums'
@@ -12,6 +13,7 @@ export class ComprobantesController {
   constructor(
     private comprobantesService: ComprobantesService,
     private pdfService: PdfService,
+    private xmlService: XmlService,
   ) {}
 
   @Post()
@@ -45,6 +47,19 @@ export class ComprobantesController {
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename="${comprobante.serie}-${comprobante.correlativo}.pdf"`,
+      'Content-Length': buffer.length,
+    })
+    res.end(buffer)
+  }
+
+  @Get(':id/xml')
+  async descargarXml(@Param('id') id: string, @Res() res: Response) {
+    const comprobante = await this.comprobantesService.obtenerPorId(id)
+    const xml = this.xmlService.generarComprobante(comprobante)
+    const buffer = Buffer.from(xml, 'utf-8')
+    res.set({
+      'Content-Type': 'application/xml',
+      'Content-Disposition': `attachment; filename="${comprobante.serie}-${comprobante.correlativo}.xml"`,
       'Content-Length': buffer.length,
     })
     res.end(buffer)
