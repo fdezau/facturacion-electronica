@@ -142,7 +142,7 @@ Genera facturas, boletas y notas de credito en PDF y XML UBL 2.1.
 
 Francisco Deza - FDev Solutions
 Desarrollador Full Stack | Lima, Peru
-https://fdev.pe
+https://fdev-landing.pages.dev
 
 ---
 
