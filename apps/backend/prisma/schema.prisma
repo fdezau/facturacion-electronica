@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── EMPRESA ───────────────────────────────────────────────
+model Empresa {
+  id              String   @id @default(uuid())
+  ruc             String   @unique
+  razonSocial     String
+  nombreComercial String?
+  direccion       String
+  ubigeo          String?
+  urbanizacion    String?
+  departamento    String?
+  provincia       String?
+  distrito        String?
+  telefono        String?
+  email           String?
+  logo            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  comprobantes Comprobante[]
+}
+
+// ─── USUARIOS ──────────────────────────────────────────────
+model Usuario {
+  id        String   @id @default(uuid())
+  nombre    String
+  email     String   @unique
+  password  String
+  rol       Rol      @default(OPERADOR)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Rol {
+  ADMIN
+  OPERADOR
+}
+
+// ─── CLIENTES ──────────────────────────────────────────────
+model Cliente {
+  id          String        @id @default(uuid())
+  tipoDoc     TipoDocumento
+  numDoc      String        @unique
+  razonSocial String
+  direccion   String?
+  email       String?
+  telefono    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  comprobantes Comprobante[]
+}
+
+enum TipoDocumento {
+  RUC
+  DNI
+  CE
+  PASAPORTE
+}
+
+// ─── PRODUCTOS ─────────────────────────────────────────────
+model Producto {
+  id          String   @id @default(uuid())
+  codigo      String   @unique
+  descripcion String
+  unidad      String   @default("NIU")
+  precio      Decimal  @db.Decimal(10, 2)
+  igv         Boolean  @default(true)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items ComprobanteItem[]
+}
+
+// ─── COMPROBANTES ──────────────────────────────────────────
+model Comprobante {
+  id               String            @id @default(uuid())
+  serie            String
+  correlativo      String
+  tipoComprobante  TipoComprobante
+  fechaEmision     DateTime          @default(now())
+  fechaVencimiento DateTime?
+
+  empresaId String
+  empresa   Empresa @relation(fields: [empresaId], references: [id])
+
+  clienteId String
+  cliente   Cliente @relation(fields: [clienteId], references: [id])
+
+  subtotal Decimal @db.Decimal(10, 2)
+  igv      Decimal @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(10, 2)
+
+  moneda        String            @default("PEN")
+  observaciones String?
+
+  estado      EstadoComprobante @default(EMITIDO)
+  xmlGenerado Boolean           @default(false)
+  pdfGenerado Boolean           @default(false)
+  xmlPath     String?
+  pdfPath     String?
+
+  comprobanteRefId String?
+  comprobanteRef   Comprobante?  @relation("NotaCredito", fields: [comprobanteRefId], references: [id])
+  notasCredito     Comprobante[] @relation("NotaCredito")
+
+  items ComprobanteItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([serie, correlativo, tipoComprobante])
+}
+
+enum TipoComprobante {
+  FACTURA
+  BOLETA
+  NOTA_CREDITO
+  NOTA_DEBITO
+}
+
+enum EstadoComprobante {
+  BORRADOR
+  EMITIDO
+  ANULADO
+}
+
+// ─── ITEMS DEL COMPROBANTE ─────────────────────────────────
+model ComprobanteItem {
+  id            String  @id @default(uuid())
+  comprobanteId String
+  comprobante   Comprobante @relation(fields: [comprobanteId], references: [id])
+
+  productoId String?
+  producto   Producto? @relation(fields: [productoId], references: [id])
+
+  descripcion    String
+  cantidad       Decimal @db.Decimal(10, 3)
+  unidad         String  @default("NIU")
+  precioUnitario Decimal @db.Decimal(10, 2)
+  descuento      Decimal @default(0) @db.Decimal(10, 2)
+  subtotal       Decimal @db.Decimal(10, 2)
+  igv            Decimal @db.Decimal(10, 2)
+  total          Decimal @db.Decimal(10, 2)
+  afectaIgv      Boolean @default(true)
+}
