@@ -6,13 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import api from '@/lib/axios'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Search, Plus, Trash2, Loader2, RefreshCw } from 'lucide-react'
 import type { Cliente } from '@/types'
@@ -90,67 +90,66 @@ export default function ClientesPage() {
           <h1 className="text-2xl font-bold text-slate-800">Clientes</h1>
           <p className="text-slate-500 text-sm mt-1">Gestiona tu cartera de clientes</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <Plus className="w-4 h-4 mr-2" /> Nuevo Cliente
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Nuevo Cliente</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(d => crearMutation.mutate(d))} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="text-xs">Tipo Documento</Label>
-                  <Select defaultValue="RUC" onValueChange={v => setValue('tipoDoc', v as any)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {['RUC', 'DNI', 'CE', 'PASAPORTE'].map(t => (
-                        <SelectItem key={t} value={t}>{t}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-xs">Número</Label>
-                  <div className="flex gap-1">
-                    <Input {...register('numDoc')} placeholder="20100070970" />
-                    <Button type="button" variant="outline" size="sm" onClick={autocompletar} disabled={autocompletando}>
-                      {autocompletando ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-                    </Button>
-                  </div>
-                  {errors.numDoc && <p className="text-red-500 text-xs mt-1">{errors.numDoc.message}</p>}
-                </div>
-              </div>
-              <div>
-                <Label className="text-xs">Razón Social / Nombre *</Label>
-                <Input {...register('razonSocial')} placeholder="Nombre o razón social" />
-                {errors.razonSocial && <p className="text-red-500 text-xs mt-1">{errors.razonSocial.message}</p>}
-              </div>
-              <div>
-                <Label className="text-xs">Dirección</Label>
-                <Input {...register('direccion')} placeholder="Av. Ejemplo 123, Lima" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="text-xs">Email</Label>
-                  <Input {...register('email')} type="email" placeholder="correo@ejemplo.com" />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-                </div>
-                <div>
-                  <Label className="text-xs">Teléfono</Label>
-                  <Input {...register('telefono')} placeholder="999999999" />
-                </div>
-              </div>
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={crearMutation.isPending}>
-                {crearMutation.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Guardando...</> : 'Guardar Cliente'}
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => setOpen(true)}>
+          <Plus className="w-4 h-4 mr-2" /> Nuevo Cliente
+        </Button>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nuevo Cliente</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(d => crearMutation.mutate(d))} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs">Tipo Documento</Label>
+                <Select defaultValue="RUC" onValueChange={v => setValue('tipoDoc', v as any)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {['RUC', 'DNI', 'CE', 'PASAPORTE'].map(t => (
+                      <SelectItem key={t} value={t}>{t}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs">Número</Label>
+                <div className="flex gap-1">
+                  <Input {...register('numDoc')} placeholder="20100070970" />
+                  <Button type="button" variant="outline" size="sm" onClick={autocompletar} disabled={autocompletando}>
+                    {autocompletando ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                  </Button>
+                </div>
+                {errors.numDoc && <p className="text-red-500 text-xs mt-1">{errors.numDoc.message}</p>}
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Razón Social / Nombre *</Label>
+              <Input {...register('razonSocial')} placeholder="Nombre o razón social" />
+              {errors.razonSocial && <p className="text-red-500 text-xs mt-1">{errors.razonSocial.message}</p>}
+            </div>
+            <div>
+              <Label className="text-xs">Dirección</Label>
+              <Input {...register('direccion')} placeholder="Av. Ejemplo 123, Lima" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs">Email</Label>
+                <Input {...register('email')} type="email" placeholder="correo@ejemplo.com" />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              </div>
+              <div>
+                <Label className="text-xs">Teléfono</Label>
+                <Input {...register('telefono')} placeholder="999999999" />
+              </div>
+            </div>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={crearMutation.isPending}>
+              {crearMutation.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Guardando...</> : 'Guardar Cliente'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="relative">
         <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />

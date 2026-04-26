@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Search, Plus, Trash2, Loader2 } from 'lucide-react'
 import type { Producto } from '@/types'
 
@@ -71,49 +71,48 @@ export default function ProductosPage() {
           <h1 className="text-2xl font-bold text-slate-800">Productos y Servicios</h1>
           <p className="text-slate-500 text-sm mt-1">Gestiona tu catálogo de productos</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <Plus className="w-4 h-4 mr-2" /> Nuevo Producto
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Nuevo Producto / Servicio</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(d => crearMutation.mutate(d))} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="text-xs">Código *</Label>
-                  <Input {...register('codigo')} placeholder="SERV-001" />
-                  {errors.codigo && <p className="text-red-500 text-xs mt-1">{errors.codigo.message}</p>}
-                </div>
-                <div>
-                  <Label className="text-xs">Unidad</Label>
-                  <Input {...register('unidad')} placeholder="NIU / ZZ" />
-                </div>
-              </div>
-              <div>
-                <Label className="text-xs">Descripción *</Label>
-                <Input {...register('descripcion')} placeholder="Descripción del producto o servicio" />
-                {errors.descripcion && <p className="text-red-500 text-xs mt-1">{errors.descripcion.message}</p>}
-              </div>
-              <div>
-                <Label className="text-xs">Precio (sin IGV) *</Label>
-                <Input {...register('precio')} type="number" step="0.01" min="0" placeholder="0.00" />
-                {errors.precio && <p className="text-red-500 text-xs mt-1">{errors.precio.message}</p>}
-              </div>
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="igv" {...register('igv')} defaultChecked className="rounded" />
-                <Label htmlFor="igv" className="text-sm cursor-pointer">Afecta IGV (18%)</Label>
-              </div>
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={crearMutation.isPending}>
-                {crearMutation.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Guardando...</> : 'Guardar Producto'}
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => setOpen(true)}>
+          <Plus className="w-4 h-4 mr-2" /> Nuevo Producto
+        </Button>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nuevo Producto / Servicio</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(d => crearMutation.mutate(d))} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs">Código *</Label>
+                <Input {...register('codigo')} placeholder="SERV-001" />
+                {errors.codigo && <p className="text-red-500 text-xs mt-1">{errors.codigo.message}</p>}
+              </div>
+              <div>
+                <Label className="text-xs">Unidad</Label>
+                <Input {...register('unidad')} placeholder="NIU / ZZ" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Descripción *</Label>
+              <Input {...register('descripcion')} placeholder="Descripción del producto o servicio" />
+              {errors.descripcion && <p className="text-red-500 text-xs mt-1">{errors.descripcion.message}</p>}
+            </div>
+            <div>
+              <Label className="text-xs">Precio (sin IGV) *</Label>
+              <Input {...register('precio')} type="number" step="0.01" min="0" placeholder="0.00" />
+              {errors.precio && <p className="text-red-500 text-xs mt-1">{errors.precio.message}</p>}
+            </div>
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="igv" {...register('igv')} defaultChecked className="rounded" />
+              <Label htmlFor="igv" className="text-sm cursor-pointer">Afecta IGV (18%)</Label>
+            </div>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={crearMutation.isPending}>
+              {crearMutation.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Guardando...</> : 'Guardar Producto'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="relative">
         <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
