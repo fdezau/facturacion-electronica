@@ -16,17 +16,17 @@ export declare class AuthService {
         };
     }>;
     register(dto: RegisterDto): Promise<{
-        nombre: string;
-        email: string;
-        rol: import("@prisma/client").$Enums.Rol;
         id: string;
+        email: string;
+        nombre: string;
+        rol: import("@prisma/client").$Enums.Rol;
         createdAt: Date;
     }>;
     perfil(id: string): Promise<{
-        nombre: string;
-        email: string;
-        rol: import("@prisma/client").$Enums.Rol;
         id: string;
+        email: string;
+        nombre: string;
+        rol: import("@prisma/client").$Enums.Rol;
         activo: boolean;
     }>;
 }

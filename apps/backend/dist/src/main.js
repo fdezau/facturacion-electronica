@@ -11,12 +11,12 @@ async function bootstrap() {
         transform: true,
     }));
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: ['http://localhost:3000', 'http://192.168.18.78:3000'],
         credentials: true,
     });
     app.setGlobalPrefix('api');
     const port = process.env.PORT ?? 3001;
-    await app.listen(port);
+    await app.listen(port, '0.0.0.0');
     console.log(`🚀 Backend corriendo en http://localhost:${port}/api`);
 }
 bootstrap();

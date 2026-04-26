@@ -13,58 +13,58 @@ export declare class ClientesService {
         numDoc: string;
     }>;
     crear(dto: CreateClienteDto): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         razonSocial: string;
         direccion: string | null;
         telefono: string | null;
-        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         numDoc: string;
+        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
     }>;
     listar(busqueda?: string): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         razonSocial: string;
         direccion: string | null;
         telefono: string | null;
-        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         numDoc: string;
+        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
     }[]>;
     obtenerPorId(id: string): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         razonSocial: string;
         direccion: string | null;
         telefono: string | null;
-        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         numDoc: string;
+        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
     }>;
     actualizar(id: string, dto: UpdateClienteDto): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         razonSocial: string;
         direccion: string | null;
         telefono: string | null;
-        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         numDoc: string;
+        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
     }>;
     eliminar(id: string): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         razonSocial: string;
         direccion: string | null;
         telefono: string | null;
-        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         numDoc: string;
+        tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
     }>;
 }

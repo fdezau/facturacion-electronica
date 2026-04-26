@@ -8,8 +8,8 @@ export declare class ComprobantesService {
     private calcularTotales;
     crear(dto: CreateComprobanteDto): Promise<{
         empresa: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             ruc: string;
@@ -17,23 +17,23 @@ export declare class ComprobantesService {
             nombreComercial: string | null;
             direccion: string;
             ubigeo: string | null;
+            urbanizacion: string | null;
             departamento: string | null;
             provincia: string | null;
             distrito: string | null;
             telefono: string | null;
             logo: string | null;
-            urbanizacion: string | null;
         };
         cliente: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             razonSocial: string;
             direccion: string | null;
             telefono: string | null;
-            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
             numDoc: string;
+            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         };
         items: {
             id: string;
@@ -78,8 +78,8 @@ export declare class ComprobantesService {
         clienteId?: string;
     }): Promise<({
         empresa: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             ruc: string;
@@ -87,23 +87,23 @@ export declare class ComprobantesService {
             nombreComercial: string | null;
             direccion: string;
             ubigeo: string | null;
+            urbanizacion: string | null;
             departamento: string | null;
             provincia: string | null;
             distrito: string | null;
             telefono: string | null;
             logo: string | null;
-            urbanizacion: string | null;
         };
         cliente: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             razonSocial: string;
             direccion: string | null;
             telefono: string | null;
-            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
             numDoc: string;
+            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         };
         items: {
             id: string;
@@ -144,8 +144,8 @@ export declare class ComprobantesService {
     })[]>;
     obtenerPorId(id: string): Promise<{
         empresa: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             ruc: string;
@@ -153,23 +153,23 @@ export declare class ComprobantesService {
             nombreComercial: string | null;
             direccion: string;
             ubigeo: string | null;
+            urbanizacion: string | null;
             departamento: string | null;
             provincia: string | null;
             distrito: string | null;
             telefono: string | null;
             logo: string | null;
-            urbanizacion: string | null;
         };
         cliente: {
-            email: string | null;
             id: string;
+            email: string | null;
             createdAt: Date;
             updatedAt: Date;
             razonSocial: string;
             direccion: string | null;
             telefono: string | null;
-            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
             numDoc: string;
+            tipoDoc: import("@prisma/client").$Enums.TipoDocumento;
         };
         items: ({
             producto: {

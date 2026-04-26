@@ -4,27 +4,27 @@ export declare class UsuarioService {
     private prisma;
     constructor(prisma: PrismaService);
     crear(dto: RegisterDto): Promise<{
-        nombre: string;
-        email: string;
-        rol: import("@prisma/client").$Enums.Rol;
         id: string;
+        email: string;
+        nombre: string;
+        rol: import("@prisma/client").$Enums.Rol;
         createdAt: Date;
     }>;
     buscarPorEmail(email: string): Promise<{
-        nombre: string;
+        id: string;
         email: string;
+        nombre: string;
         password: string;
         rol: import("@prisma/client").$Enums.Rol;
-        id: string;
         activo: boolean;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
     buscarPorId(id: string): Promise<{
-        nombre: string;
-        email: string;
-        rol: import("@prisma/client").$Enums.Rol;
         id: string;
+        email: string;
+        nombre: string;
+        rol: import("@prisma/client").$Enums.Rol;
         activo: boolean;
     }>;
 }

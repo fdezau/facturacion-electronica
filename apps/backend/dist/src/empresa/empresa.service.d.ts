@@ -5,8 +5,8 @@ export declare class EmpresaService {
     private prisma;
     constructor(prisma: PrismaService);
     crear(dto: CreateEmpresaDto): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -14,16 +14,16 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }>;
     obtener(): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -31,16 +31,16 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }[]>;
     obtenerPrincipal(): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -48,16 +48,16 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }>;
     obtenerPorId(id: string): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -65,16 +65,16 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }>;
     actualizar(id: string, dto: UpdateEmpresaDto): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -82,16 +82,16 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }>;
     eliminar(id: string): Promise<{
-        email: string | null;
         id: string;
+        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         ruc: string;
@@ -99,11 +99,11 @@ export declare class EmpresaService {
         nombreComercial: string | null;
         direccion: string;
         ubigeo: string | null;
+        urbanizacion: string | null;
         departamento: string | null;
         provincia: string | null;
         distrito: string | null;
         telefono: string | null;
         logo: string | null;
-        urbanizacion: string | null;
     }>;
 }
